@@ -71,40 +71,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-local function start_rust_analyzer()
-	vim.lsp.start({
-		name = "rust-analyzer",
-		cmd = { "rust-analyzer" },
-		root_dir = vim.fs.dirname(vim.fs.find({ "Cargo.toml", ".git" }, { upward = true })[1]),
-		settings = {
-			["rust-analyzer"] = {
-				["cargo"] = {
-					["loadOutDirsFromCheck"] = true,
-				},
-				["procMacro"] = {
-					enable = true,
-				},
-			},
-		},
-	})
-end
-
-local function setup_rust_format_on_save(bufnr)
-	vim.api.nvim_create_autocmd("BufWritePre", {
-		buffer = bufnr,
-		callback = function()
-			vim.lsp.buf.format({ async = false })
-		end,
-	})
-end
-
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "rust",
-	callback = function()
-		start_rust_analyzer()
-	end,
-})
-
 local function lsp_keymaps(bufnr)
 	local opts = { buffer = bufnr, silent = true }
 	-- NOTE:
@@ -125,9 +91,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
 		if client.name == "gopls" then
 			setup_go_format_on_save(args.buf)
-		end
-		if client.name == "rust-analyzer" then
-			setup_rust_format_on_save(args.buf)
 		end
 	end,
 })
