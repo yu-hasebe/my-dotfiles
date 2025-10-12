@@ -10,9 +10,18 @@ FILES=(
 )
 
 function _install() {
-	local _file
+	local _force="${1}"
+
+	local _file _target
 	for _file in "${FILES[@]}"; do
-		ln -sf "$PWD/${_file}" "$HOME/${_file}"
+		_target="$HOME/${_file}"
+
+		if [[ "${_force}" -eq 0 ]] && [[ -e "${_target}" || -L "${_target}" ]]; then
+			echo "⚠️ Skipping ${_file}, already exists: ${_target}" >&2
+            continue
+		fi
+
+		ln -sf "$PWD/${_file}" "${_target}"
 		echo "🔗 Linked: ${_file}" >&2
 	done
 
@@ -33,13 +42,44 @@ function _uninstall() {
 	echo "✅ All symlinks removed!" >&2
 }
 
+function _show_help() {
+	echo "Usage: ${0} [-h] [-f] [install|uninstall]"
+	echo ""
+	echo "Commands:"
+	echo "  install   Creates symlinks"
+	echo "  uninstall Removes symlinks"
+	echo "Target files:"
+	echo "$(printf -- "  - %s\n" "${FILES[@]}")"
+	echo "Options:"
+	echo "  -h        Shows this help message"
+	echo "  -f        Overwrites exsiting files or directories when creating symlinkns (install only)"
+}
+
 function main() {
+	local _force=0
+	while getopts "hf" _opt; do
+		case "${_opt}" in
+		h)
+			_show_help
+			return 0
+			;;
+		f)
+			_force=1
+			;;
+		*)
+			_show_help
+			return 0
+			;;
+		esac
+	done
+	shift $((OPTIND - 1))
+
 	local _subcommand="${1}"
 	case "${_subcommand}" in
-	install) _install ;;
+	install) _install "${_force}" ;;
 	uninstall) _uninstall ;;
-	*) ;;
+	*) _show_help ;;
 	esac
 }
 
-main "${@}"
+main "${@:-}"
