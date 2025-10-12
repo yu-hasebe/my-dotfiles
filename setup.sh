@@ -1,19 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-FILES=(
-	".config"
-	".gitconfig"
-	".tmux.conf"
-	".zprofile"
-	".zshrc"
-)
+function _files() {
+	local _files=(
+		".config"
+		".gitconfig"
+		".tmux.conf"
+		".zprofile"
+		".zshrc"
+	)
+
+	printf "%s\n" "${_files[@]}"
+}
 
 function _install() {
 	local _force="${1}"
+	shift
+	local _files=("${@}")
 
 	local _file _target
-	for _file in "${FILES[@]}"; do
+	for _file in "${_files[@]}"; do
 		_target="$HOME/${_file}"
 
 		if [[ -e "${_target}" || -L "${_target}" ]]; then
@@ -34,8 +40,10 @@ function _install() {
 }
 
 function _uninstall() {
+	local _files=("${@}")
+
 	local _file
-	for _file in "${FILES[@]}"; do
+	for _file in "${_files[@]}"; do
 		if [[ -L "$HOME/${_file}" ]]; then
 			rm "$HOME/${_file}"
 			echo "❌ Removed symlink: ${_file}" >&2
@@ -48,42 +56,73 @@ function _uninstall() {
 }
 
 function _show_help() {
+	local _files=()
+	while IFS= read -r _file; do
+		_files+=("${_file}")
+	done < <(_files)
+
 	echo "Usage: ${0} [-h] [-f] [install|uninstall]"
 	echo ""
 	echo "Commands:"
 	echo "  install   Creates symlinks at $HOME"
 	echo "  uninstall Removes symlinks at $HOME"
 	echo "Target files:"
-	echo "$(printf -- "  - %s\n" "${FILES[@]}")"
+	echo "$(printf -- "  - %s\n" "${_files[@]}")"
 	echo "Options:"
 	echo "  -h        Shows this help message"
-	echo "  -f        Overwrites exsiting files or directories when creating symlinkns (install only)"
+	echo "  -f        Forcibly overwrites exsiting files or directories when creating symlinkns (install only)"
+	echo "  -t        Specifies the target files or directories to be replaced with symlinks"
 }
 
 function main() {
-	local _force=0
-	while getopts "hf" _opt; do
-		case "${_opt}" in
-		h)
-			_show_help
-			return 0
+	local _force=0 _help=0 _targets=() _parsing_target=0 _subcommand=""
+	while [[ "${#}" -gt 0 ]]; do
+		case "${1}" in
+		-h)
+			_parsing_target=0
+			_help=1
 			;;
-		f)
+		-f)
+			_parsing_target=0
 			_force=1
 			;;
+		-t)
+			_parsing_target=1
+			;;
+		install | uninstall)
+			_parsing_target=0
+			_subcommand="${1}"
+			;;
 		*)
-			_show_help
-			return 0
+			if [[ "${_parsing_target}" -eq 1 ]]; then
+				_targets+=("${1}")
+			else
+				echo "invalid args: ${1}" >&2
+				return 1
+			fi
 			;;
 		esac
+		shift
 	done
-	shift $((OPTIND - 1))
 
-	local _subcommand="${1}"
+	if [[ "${_help}" -eq 1 ]]; then
+		_show_help
+		return 0
+	fi
+
+	if [[ "${#_targets[@]}" -eq 0 ]]; then
+		while IFS= read -r _file; do
+			_targets+=("${_file}")
+		done < <(_files)
+	fi
+
 	case "${_subcommand}" in
-	install) _install "${_force}" ;;
-	uninstall) _uninstall ;;
-	*) _show_help ;;
+	install) _install "${_force}" "${_targets[@]}" ;;
+	uninstall) _uninstall "${_targets[@]}" ;;
+	*)
+		echo "invalid subcommand: ${_subcommand}"
+		return 1
+		;;
 	esac
 }
 
