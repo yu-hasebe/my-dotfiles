@@ -1,13 +1,10 @@
 # dotfiles
-`dotfiles` installs dotfiles in this repository to `$HOME`
-```
-# You can see the target dotfiles:
+`dotfiles` is a repository for storing my dotfiles.
+
+It also has `setup.sh` to create symlinks (pointing to dotfiles in this repository) to `$HOME`.
+
+You can see how to use that command:
+
+```bash
 ./setup.sh -h
-
-# You can install the dotfiles:
-./setup.sh install
-# or you can overwrite the existing files or directories by `-f` option:
-./setup.sh -f install
 ```
-
-
