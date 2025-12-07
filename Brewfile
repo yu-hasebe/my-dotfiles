@@ -8,6 +8,8 @@ brew "bash-language-server"
 brew "gh"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
+# Language server for the Go language
+brew "gopls"
 # Configurable static site generator
 brew "hugo"
 # Ambitious Vim-fork focused on extensibility and agility
@@ -35,4 +37,3 @@ cask "slack"
 cask "tableplus"
 # GPU-accelerated cross-platform terminal emulator and multiplexer
 cask "wezterm"
-go "golang.org/x/tools/gopls"
