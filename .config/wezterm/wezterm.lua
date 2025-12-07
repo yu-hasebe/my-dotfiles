@@ -1,6 +1,7 @@
 local wezterm = require("wezterm")
 
 return {
+	color_scheme = "Thayer Bright",
 	font = wezterm.font_with_fallback({
 		"x14y24pxHeadUpDaisy",
 		"HackGen35 Console NF",
