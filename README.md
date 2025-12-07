@@ -7,11 +7,15 @@ This repository has my dotfiles and their setup script.
 You can create symlinks at your `$HOME` but does not replace existing files, directories or symlinks:
 ```bash
 ./setup.sh install --target .*
+```
 
-# Or you can specify some symlinks:
+Or you can specify some symlinks:
+```bash
 ./setup.sh install --target .config .gitconfig
+```
 
-# Or you can replace existing file, directories or symlinks with --force flag:
+Or you can replace existing file, directories or symlinks with --force flag:
+```bash
 ./setup.sh install --target .* --force
 ```
 
