@@ -23,13 +23,13 @@ brew bundle dump --describe --file=Brewfile --force
 
 ## Setting up dotfiles in your `$HOME` directory
 
-To install dotfiles, run the following command from the repository root:
+To install all dotfiles in this repository, run the following command from the repository root:
 ```bash
 ./setup.sh install -t .* --force
 ```
 
-This command creates symbolic links in your $HOME directory for all files matching the pattern .* in this repository.
-The --force flag overwrites existing files or symlinks in $HOME.
+This command creates symbolic links in your `$HOME` directory for all files matching the pattern `.*` in this repository.
+The --force flag overwrites existing files or symlinks in `$HOME`.
 
 For additional commands and options, see:
 ```bash
