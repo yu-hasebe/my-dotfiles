@@ -79,7 +79,7 @@ local function lsp_keymaps(bufnr)
 end
 
 -- Go configuration
-vim.api.nvim_create_autocmd("FileType", {
+create_autocmd("FileType", {
 	pattern = "go",
 	callback = function()
 		vim.lsp.start({
@@ -107,7 +107,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Bash configuration
-vim.api.nvim_create_autocmd("FileType", {
+create_autocmd("FileType", {
 	pattern = { "sh", "bash", "zsh" },
 	callback = function()
 		vim.lsp.start({
@@ -132,7 +132,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Lua configuration
-vim.api.nvim_create_autocmd("FileType", {
+create_autocmd("FileType", {
 	pattern = { "lua" },
 	callback = function()
 		vim.lsp.start({
