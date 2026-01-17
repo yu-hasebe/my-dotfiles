@@ -31,7 +31,6 @@ vim.o.cursorline = true
 
 vim.cmd("syntax enable")
 vim.cmd("filetype plugin indent on")
-vim.cmd("colorscheme desert")
 
 vim.diagnostic.config({
 	virtual_text = true,
@@ -166,6 +165,7 @@ create_autocmd("FileType", {
 
 require("config.lazy")
 
+vim.cmd.colorscheme("kanagawa")
 require("mini.icons").setup()
 require("mini.statusline").setup()
 vim.opt.laststatus = 3
