@@ -71,6 +71,8 @@ create_autocmd('BufWritePre', {
   desc = 'Auto mkdir to save files'
 })
 
+require("mini.icons").setup()
+
 local function lsp_keymaps(bufnr)
 	local opts = { buffer = bufnr, silent = true }
 	-- NOTE:
