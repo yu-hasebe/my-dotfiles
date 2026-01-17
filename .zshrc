@@ -1,2 +1,1 @@
-
-PROMPT='%F{cyan}%1d%f ❯ '
+eval "$(starship init zsh)"
