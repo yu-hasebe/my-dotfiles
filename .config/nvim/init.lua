@@ -66,9 +66,6 @@ require("mini.icons").setup()
 
 local function lsp_keymaps(bufnr)
 	local opts = { buffer = bufnr, silent = true }
-	-- NOTE:
-	-- <C-i> next
-	-- <C-o> back
 	vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 	vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 	vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
