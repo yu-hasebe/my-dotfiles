@@ -1,5 +1,7 @@
 require('helpers.user_command')
 require('helpers.lsp_lua')
+require('helpers.lsp_go')
+require('helpers.lsp_sh')
 
 vim.o.encoding = "utf-8"
 vim.o.number = true
@@ -49,106 +51,6 @@ create_autocmd("BufWritePre", {
 })
 
 require("mini.icons").setup()
-
-local function lsp_keymaps(bufnr)
-	local opts = { buffer = bufnr, silent = true }
-	vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-	vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-	vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-	vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-
-	vim.keymap.set("i", "<C-q>", "<C-x><C-o>", opts)
-end
-
--- Go configuration
-create_autocmd("FileType", {
-	pattern = "go",
-	callback = function()
-		vim.lsp.start({
-			name = "gopls",
-			cmd = { "gopls" },
-			root_dir = vim.fs.root(0, { "go.mod", ".git" }),
-			settings = {
-				gopls = {
-					gofumpt = true,
-					analyses = { unusedparams = true },
-					staticcheck = true,
-				},
-			},
-			on_attach = function(client, bufnr)
-				lsp_keymaps(bufnr)
-				vim.api.nvim_create_autocmd("BufWritePre", {
-					buffer = bufnr,
-					callback = function()
-						vim.lsp.buf.format({ async = false })
-					end,
-				})
-			end,
-		})
-	end,
-})
-
--- Bash configuration
-create_autocmd("FileType", {
-	pattern = { "sh", "bash", "zsh" },
-	callback = function()
-		vim.lsp.start({
-			name = "bashls",
-			cmd = { "bash-language-server", "start" },
-			root_dir = vim.fs.root(0, { ".git" }),
-			on_attach = function(client, bufnr)
-				vim.api.nvim_create_autocmd("BufWritePre", {
-					buffer = bufnr,
-					callback = function()
-						vim.lsp.buf.format({ async = false })
-					end,
-				})
-			end,
-			settings = {
-				bashIde = {
-					globPattern = "*@(.sh|.inc|.bash|.command)",
-				},
-			},
-		})
-	end,
-})
-
--- Lua configuration
-create_autocmd("FileType", {
-	pattern = { "lua" },
-	callback = function()
-		vim.lsp.start({
-			name = "lua_ls",
-			cmd = { "lua-language-server" },
-			root_dir = vim.fs.root(0, { ".git" }),
-
-			settings = {
-				Lua = {
-					diagnostics = {
-						globals = { "vim" },
-					},
-					workspace = {
-						checkThirdParty = false,
-						library = vim.api.nvim_get_runtime_file("", true),
-					},
-					format = {
-						enable = false,
-					},
-				},
-			},
-
-			-- FIXME: stylua does not work on save
-			on_attach = function(client, bufnr)
-				vim.api.nvim_create_autocmd("BufWritePre", {
-					buffer = bufnr,
-					callback = function()
-						vim.lsp.buf.format({ async = false })
-					end,
-				})
-			end,
-		})
-	end,
-})
 
 require("config.lazy")
 
