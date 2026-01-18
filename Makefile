@@ -12,4 +12,4 @@ create-symlinks:
 
 .PHONY: create-symlinks-force
 create-symlinks-force:
-	./scripts/bin/create-symlinks.sh force
+	./scripts/bin/create-symlinks.sh --force --interactive
