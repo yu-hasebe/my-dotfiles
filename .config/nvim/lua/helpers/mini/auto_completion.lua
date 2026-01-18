@@ -55,4 +55,3 @@ vim.keymap.set("i", "<cr>", function()
 	-- popup is visible but item is NOT selected -> hide popup and insert newline
 	return keys.cy .. keys.cr
 end, { expr = true, desc = "Complete current item if item is selected" })
-

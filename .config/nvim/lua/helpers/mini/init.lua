@@ -118,14 +118,14 @@ clue.setup({
 	},
 })
 
-local dirname = vim.fn.stdpath('config') .. '/lua/helpers/mini'
+local dirname = vim.fn.stdpath("config") .. "/lua/helpers/mini"
 
 for file, ftype in vim.fs.dir(dirname) do
-  if ftype == 'file' and vim.endswith(file, '.lua') and file ~= 'init.lua' then
-    local name = file:sub(1, -5)
-    local ok, result = pcall(require, 'helpers.mini.' .. name)
-    if not ok then
-      vim.notify('Error loading a mini helper: ' .. name .. '\n' .. result, vim.log.levels.WARN)
-    end
-  end
+	if ftype == "file" and vim.endswith(file, ".lua") and file ~= "init.lua" then
+		local name = file:sub(1, -5)
+		local ok, result = pcall(require, "helpers.mini." .. name)
+		if not ok then
+			vim.notify("Error loading a mini helper: " .. name .. "\n" .. result, vim.log.levels.WARN)
+		end
+	end
 end
