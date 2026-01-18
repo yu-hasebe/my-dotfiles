@@ -1,6 +1,5 @@
-vim.api.nvim_create_user_command("InitLua", function()
-	vim.cmd.edit(vim.fn.stdpath("config") .. "/init.lua")
-end, { desc = "Open init.lua" })
+require('helpers.user_command')
+require('helpers.lsp_lua')
 
 vim.o.encoding = "utf-8"
 vim.o.number = true
@@ -33,17 +32,6 @@ vim.diagnostic.config({
 	underline = true,
 	update_in_insert = false,
 })
-
-local augroup = vim.api.nvim_create_augroup("init.lua", {})
-
-local function create_autocmd(event, opts)
-	vim.api.nvim_create_autocmd(
-		event,
-		vim.tbl_extend("force", {
-			group = augroup,
-		}, opts)
-	)
-end
 
 -- Type gx to jump this page:
 -- https://vim-jp.org/vim-users-jp/2011/02/20/Hack-202.html
