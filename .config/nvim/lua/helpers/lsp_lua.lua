@@ -1,7 +1,4 @@
-require("helpers.auto_command")
-
--- Lua configuration
-create_autocmd("FileType", {
+return {
 	pattern = { "lua" },
 	callback = function()
 		vim.lsp.start({
@@ -35,4 +32,4 @@ create_autocmd("FileType", {
 			end,
 		})
 	end,
-})
+}

@@ -1,7 +1,6 @@
 require("helpers.user_command")
-require("helpers.lsp_lua")
-require("helpers.lsp_go")
-require("helpers.lsp_sh")
+require("helpers.auto_command")
+require("helpers.lsp")
 
 vim.o.encoding = "utf-8"
 vim.o.number = true

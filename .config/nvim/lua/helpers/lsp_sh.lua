@@ -1,4 +1,4 @@
-create_autocmd("FileType", {
+return {
 	pattern = { "sh", "bash", "zsh" },
 	callback = function()
 		vim.lsp.start({
@@ -20,4 +20,4 @@ create_autocmd("FileType", {
 			},
 		})
 	end,
-})
+}
