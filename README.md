@@ -25,13 +25,7 @@ make update-brewfile
 
 To install all dotfiles in this repository, run the following command from the repository root:
 ```bash
-./setup.sh install -t .* --force
-```
-
-This command creates symbolic links in your `$HOME` directory for all files matching the pattern `.*` in this repository.
-The --force flag overwrites existing files or symlinks in `$HOME`.
-
-For additional commands and options, see:
-```bash
-./setup.sh --help
+make create-symlinks
+# or
+make create-symlinks-force
 ```
