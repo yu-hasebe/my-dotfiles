@@ -6,18 +6,22 @@ function main() {
   local _force="${1:-}"
   local _dotfile
 
-  for _dotfile in .*; do
-    case "${_dotfile}" in
-    . | .. | .git) continue ;;
-    *)
-      if [[ "${_force}" == "force" ]]; then
-        ln -sfivn "${PWD}/${_dotfile}" "${HOME}"
-      else
-        ln -svn "${PWD}/${_dotfile}" "${HOME}"
-      fi
-      ;;
-    esac
-  done
+  (
+    cd dotfiles
+
+    for _dotfile in .*; do
+      case "${_dotfile}" in
+      . | .. | .git) continue ;;
+      *)
+        if [[ "${_force}" == "force" ]]; then
+          ln -sfivn "${PWD}/${_dotfile}" "${HOME}"
+        else
+          ln -svn "${PWD}/${_dotfile}" "${HOME}"
+        fi
+        ;;
+      esac
+    done
+  )
 }
 
-main "${@}"
+main "$@"
